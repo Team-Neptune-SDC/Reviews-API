@@ -1,0 +1,23 @@
+{
+  "name": "Reviews-API",
+  "version": "1.0.0",
+  "description": "",
+  "main": "nosqlDataModel.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Team-Neptune-SDC/Reviews-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team-Neptune-SDC/Reviews-API/issues"
+  },
+  "homepage": "https://github.com/Team-Neptune-SDC/Reviews-API#readme",
+  "dependencies": {
+    "mongoose": "^5.12.7"
+  }
+}
