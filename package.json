@@ -4,7 +4,8 @@
   "description": "",
   "main": "nosqlDataModel.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/Team-Neptune-SDC/Reviews-API#readme",
   "dependencies": {
-    "mongoose": "^5.12.7"
+    "mongoose": "^5.12.7",
+    "nodemon": "^2.0.7"
   }
 }

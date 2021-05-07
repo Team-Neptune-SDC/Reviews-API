@@ -14,7 +14,6 @@ const reviewSchema = {
   "response": String,
   "helpfulness": String,
 };
-reviewSchema.index({review_id: 1});
 
 const characteristicReviewSchema = {
   "id": Number,
@@ -22,7 +21,6 @@ const characteristicReviewSchema = {
   "review_id": Number,
   "value": Number
 }
-characteristicReviewSchema.index({characteristic_id: 1});
 
 const characteristicsSchema = {
   "id": Number,
@@ -31,7 +29,6 @@ const characteristicsSchema = {
   "characteristic_review_data": [characteristicReviewSchema],
   "avg": Number
 };
-characteristicsSchema.index({characteristic_id: 1});
 
 const photosArrSchema = {
   "id": Number,
@@ -42,7 +39,6 @@ const photosSchema = {
   "_id": Number,
   "photos": [photosArrSchema]
 }
-photosSchema.index({review_id: 1});
 
 module.exports({
   reviewSchema,
