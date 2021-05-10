@@ -124,9 +124,11 @@ app.post('/reviews', (req, res) => {
       review_id: reviewId,
       value: 0
     };
+
     charUpdate.value = charObj[key]
-    Characteristics.update({
-      id: key, product_id: req.body.product_id},
+
+    Characteristics.update(
+      {id: key, product_id: req.body.product_id},
       {$push: {'characteristic_review_data': charUpdate}},
       (err, result) => {
         if (err) {
@@ -137,7 +139,22 @@ app.post('/reviews', (req, res) => {
   }
 });
 
-app.put('/reviews/:review_id/helpful')
+app.put('/reviews/:review_id/helpful', (req, res) => {
+  let reviewId = req.params.review_id;
+
+  Reviews.find({id: reviewId}, (err, result) => {
+    if (err) {
+      res.status(404).send('Could not find review to update helpfulness');
+    }
+    let helpfulness = result.helpfulness++;
+    Reviews.updateOne({id: reviewId}, {helpfulness}, (err, results) => {
+      if (err) {
+        res.status(404).send('Could not mark review as helpful');
+      }
+      res.status(200).send(results);
+    })
+  })
+});
 
 app.put('/reviews/:review_id/report')
 
