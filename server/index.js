@@ -156,7 +156,22 @@ app.put('/reviews/:review_id/helpful', (req, res) => {
   })
 });
 
-app.put('/reviews/:review_id/report')
+app.put('/reviews/:review_id/report', (req, res) => {
+  let reviewId = req.params.review_id;
+
+  Reviews.find({id: reviewId}, (err, result) => {
+    if (err) {
+      res.status(404).send('Could not find review to report');
+    }
+    let reported = true;
+    Reviews.updateOne({id: reviewId}, {reported}, (err, results) => {
+      if (err) {
+        res.status(404).send('Could not report review');
+      }
+      res.status(200).send(results);
+    })
+  })
+});
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
