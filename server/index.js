@@ -81,14 +81,14 @@ app.post('/reviews', (req, res) => {
     if (err) {
       res.status(404);
     }
-    reviewId = result[0].id;
+    reviewId = result[0].id + 1;
     res.status(200);
   }).exec();
 
   let charsId;
   MaxIds.find({table: 'characteristics_agg'}, (err, result) => {
     charsId = result.id + 1;
-  });
+  }).exec();
 
   let charsReviewDataId;
   MaxIds.find({table: 'characteristics_agg_reviewdata'}, (err, result) => {
@@ -116,18 +116,25 @@ app.post('/reviews', (req, res) => {
   });
 
   let charObj = req.body.characteristics;
-  let charUpdate = {
-    id: charsReviewDataId,
-    characteristic_id: charsId,
-    review_id: reviewId,
-    value: 0
-  };
 
   for (let key in charObj) {
-
+    let charUpdate = {
+      id: charsReviewDataId,
+      characteristic_id: key,
+      review_id: reviewId,
+      value: 0
+    };
+    charUpdate.value = charObj[key]
+    Characteristics.update({
+      id: key, product_id: req.body.product_id},
+      {$push: {'characteristic_review_data': charUpdate}},
+      (err, result) => {
+        if (err) {
+          res.status(404).send('Could not update characteristics')
+        }
+        res.status(201);
+    })
   }
-
-  Characteristics.update({product_id: req.body.product_id}, {$push: {'characteristic_review_data': charUpdate}})
 });
 
 app.put('/reviews/:review_id/helpful')
