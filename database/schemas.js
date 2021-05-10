@@ -1,18 +1,25 @@
 const mongoose = require('mongoose');
 
+const reviewPhotosSchema = {
+  "id": Number,
+  "review_id": Number,
+  "url": String
+};
+
 const reviewSchema = {
   "id": Number,
   "product_id": Number,
   "rating": Number,
-  "date": String,
+  "date": {type: Date, default: Date.now},
   "summary": String,
   "body": String,
-  "recommend": Number,
-  "reported": Number,
+  "recommend": Boolean,
+  "reported": Boolean,
   "reviewer_name": String,
   "reviewer_email": String,
   "response": String,
   "helpfulness": String,
+  "photos": [reviewPhotosSchema]
 };
 
 const characteristicReviewSchema = {
@@ -27,23 +34,17 @@ const characteristicsSchema = {
   "product_id": Number,
   "name": String,
   "characteristic_review_data": [characteristicReviewSchema],
-  "avg": Number
 };
 
-const photosArrSchema = {
+const maxIdsSchema = {
   "id": Number,
-  "url": String
-}
+  "table": String
+};
 
-const photosSchema = {
-  "_id": Number,
-  "photos": [photosArrSchema]
-}
-
-module.exports({
+module.exports = {
+  reviewPhotosSchema,
   reviewSchema,
   characteristicReviewSchema,
   characteristicsSchema,
-  photosArrSchema,
-  photosSchema
-});
+  maxIdsSchema
+};

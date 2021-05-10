@@ -9,12 +9,12 @@ mongoose.connect(mongoUri, {
   useFindAndModify: true
 });
 
-const Characteristic = mongoose.model('Characteristic', schemas.characteristicsSchema, 'characteristis_aggregated');
-const Review = mongoose.model('Review', schemas.reviewSchema, 'reviews');
-const Photo = mongoose.model('Photo', schemas.photosSchema, 'reviews_photos_aggregated');
+const Characteristic = mongoose.model('Characteristic', schemas.characteristicsSchema, 'characteristics_aggregated');
+const Review = mongoose.model('Review', schemas.reviewSchema, 'reviews_aggregated');
+const MaxId = mongoose.model('MaxId', schemas.maxIdsSchema, 'maxIds');
 
-module.exports({
+module.exports = {
   Characteristic,
   Review,
-  Photo
-});
+  MaxId
+};
