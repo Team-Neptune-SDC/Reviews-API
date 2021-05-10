@@ -83,16 +83,45 @@ app.post('/reviews', (req, res) => {
     }
     reviewId = result[0].id + 1;
     res.status(200);
+
+    MaxIds.updateOne({table: 'reviews_agg'}, {id: reviewId}, (err, result) => {
+      if (err) {
+        res.status(404).send('Could not increment reviews_agg');
+      }
+      res.status(200);
+    })
   }).exec();
 
   let charsId;
   MaxIds.find({table: 'characteristics_agg'}, (err, result) => {
+    if (err) {
+      res.status(404);
+    }
     charsId = result.id + 1;
+    res.status(200);
+
+    MaxIds.updateOne({table: 'characteristics_agg'}, {id: charsId}, (err, result) => {
+      if (err) {
+        res.status(404).send('Could not increment characteristics_agg');
+      }
+      res.status(200);
+    })
   }).exec();
 
   let charsReviewDataId;
   MaxIds.find({table: 'characteristics_agg_reviewdata'}, (err, result) => {
+    if (err) {
+      res.status(404);
+    }
     charsReviewDataId = result.id + 1;
+    res.status(200);
+
+    MaxIds.updateOne({table: 'characteristics_agg_reviewdata'}, {id: charsReviewDataId}, (err, result) => {
+      if (err) {
+        res.status(404).send('Could not increment characteristics_agg_reviewdata');
+      }
+      res.status(200);
+    })
   }).exec();
 
   Reviews.create({
