@@ -83,6 +83,27 @@ app.post('/reviews', (req, res) => {
       return console.log('could not update reviews id');
     }
     reviewId = result.id + 1;
+
+    Reviews.create({
+      id: reviewId,
+      product_id: req.body.prodcut_id,
+      rating: req.body.rating,
+      summary: req.body.summary,
+      body: req.body.body,
+      recommend: req.body.recommend,
+      reported: req.body.reported,
+      reviewer_name: req.body.name,
+      reviewer_email: req.body.email,
+      response: req.body.response,
+      helpfulness: 0,
+      photos: req.body.photos
+    }, (err, results) => {
+      if (err) {
+        res.status(404).send('Could not post to Reviews');
+      }
+      console.log(results)
+      res.status(201).send(results);
+    })
   })
 
   let charsReviewDataId;
@@ -110,7 +131,6 @@ app.post('/reviews', (req, res) => {
         {id: key, product_id: req.body.product_id},
         {$push: {'characteristic_review_data': charUpdate}},
         (err, result) => {
-          console.log('wtv')
           if (err) {
             res.status(404).send('Could not update characteristics')
           }
@@ -118,26 +138,6 @@ app.post('/reviews', (req, res) => {
       })
     }
   }
-
-  Reviews.create({
-    id: reviewId,
-    product_id: req.body.product_id,
-    rating: req.body.rating,
-    summary: req.body.summary,
-    body: req.body.body,
-    recommend: req.body.recommend,
-    reported: req.body.reported,
-    reviewer_name: req.body.reviewer_name,
-    reviewer_email: req.body.reviewer_email,
-    response: req.body.response,
-    helpfulness: req.body.helpfulness,
-    photos: req.body.photos
-  }, (err, results) => {
-    if (err) {
-      res.status(404).send('Could not post to Reviews');
-    }
-    res.status(201).send(results);
-  });
 });
 
 app.put('/reviews/:review_id/helpful', (req, res) => {
@@ -168,7 +168,7 @@ app.put('/reviews/:review_id/report', (req, res) => {
       res.status(404).send('Could not find review to report');
     }
 
-    let reported = 'true';
+    let reported = 1;
 
     Reviews.updateOne({id: reviewId}, {reported}, (err, results) => {
       if (err) {

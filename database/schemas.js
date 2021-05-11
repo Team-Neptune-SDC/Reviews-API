@@ -17,7 +17,7 @@ const reviewSchema = {
   "summary": String,
   "body": String,
   "recommend": String,
-  "reported": String,
+  "reported": Number,
   "reviewer_name": String,
   "reviewer_email": String,
   "response": String,
