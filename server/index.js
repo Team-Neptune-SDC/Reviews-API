@@ -77,52 +77,47 @@ app.get('/reviews/meta', (req, res) => {
 
 app.post('/reviews', (req, res) => {
   let reviewId;
-  MaxIds.find({table: 'reviews_agg'}, (err, result) => {
+
+  MaxIds.findOneAndUpdate({table: 'reviews_agg'}, {$inc: {'id': 1}}, (err, result) => {
     if (err) {
-      res.status(404);
+      return console.log('could not update reviews id');
     }
-    reviewId = result[0].id + 1;
-    res.status(200);
-
-    MaxIds.updateOne({table: 'reviews_agg'}, {id: reviewId}, (err, result) => {
-      if (err) {
-        res.status(404).send('Could not increment reviews_agg');
-      }
-      res.status(200);
-    })
-  }).exec();
-
-  let charsId;
-  MaxIds.find({table: 'characteristics_agg'}, (err, result) => {
-    if (err) {
-      res.status(404);
-    }
-    charsId = result.id + 1;
-    res.status(200);
-
-    MaxIds.updateOne({table: 'characteristics_agg'}, {id: charsId}, (err, result) => {
-      if (err) {
-        res.status(404).send('Could not increment characteristics_agg');
-      }
-      res.status(200);
-    })
-  }).exec();
+    reviewId = result.id + 1;
+  })
 
   let charsReviewDataId;
-  MaxIds.find({table: 'characteristics_agg_reviewdata'}, (err, result) => {
-    if (err) {
-      res.status(404);
-    }
-    charsReviewDataId = result.id + 1;
-    res.status(200);
+  let charObj = req.body.characteristics;
 
-    MaxIds.updateOne({table: 'characteristics_agg_reviewdata'}, {id: charsReviewDataId}, (err, result) => {
+  if (req.body.characteristics) {
+    MaxIds.findOneAndUpdate({table: 'characteristics_agg_reviewdata'}, {$inc: {'id': 1}}, (err, result) => {
       if (err) {
-        res.status(404).send('Could not increment characteristics_agg_reviewdata');
+        return console.log('could not update characteristics review data id');
       }
-      res.status(200);
+      charsReviewDataId = result.id + 1;
     })
-  }).exec();
+
+    for (let key in charObj) {
+      let charUpdate = {
+        id: charsReviewDataId,
+        characteristic_id: key,
+        review_id: reviewId,
+        value: 0
+      };
+
+      charUpdate.value = charObj[key]
+
+      Characteristics.updateOne(
+        {id: key, product_id: req.body.product_id},
+        {$push: {'characteristic_review_data': charUpdate}},
+        (err, result) => {
+          console.log('wtv')
+          if (err) {
+            res.status(404).send('Could not update characteristics')
+          }
+          res.status(201);
+      })
+    }
+  }
 
   Reviews.create({
     id: reviewId,
@@ -141,31 +136,8 @@ app.post('/reviews', (req, res) => {
     if (err) {
       res.status(404).send('Could not post to Reviews');
     }
-    res.status(201);
+    res.status(201).send(results);
   });
-
-  let charObj = req.body.characteristics;
-
-  for (let key in charObj) {
-    let charUpdate = {
-      id: charsReviewDataId,
-      characteristic_id: key,
-      review_id: reviewId,
-      value: 0
-    };
-
-    charUpdate.value = charObj[key]
-
-    Characteristics.update(
-      {id: key, product_id: req.body.product_id},
-      {$push: {'characteristic_review_data': charUpdate}},
-      (err, result) => {
-        if (err) {
-          res.status(404).send('Could not update characteristics')
-        }
-        res.status(201);
-    })
-  }
 });
 
 app.put('/reviews/:review_id/helpful', (req, res) => {
@@ -175,9 +147,12 @@ app.put('/reviews/:review_id/helpful', (req, res) => {
     if (err) {
       res.status(404).send('Could not find review to update helpfulness');
     }
-    let helpfulness = result.helpfulness++;
+    let helpfulness = parseInt(result[0].helpfulness);
+    helpfulness++;
+
     Reviews.updateOne({id: reviewId}, {helpfulness}, (err, results) => {
       if (err) {
+        console.log('bye')
         res.status(404).send('Could not mark review as helpful');
       }
       res.status(200).send(results);
@@ -192,7 +167,9 @@ app.put('/reviews/:review_id/report', (req, res) => {
     if (err) {
       res.status(404).send('Could not find review to report');
     }
-    let reported = true;
+
+    let reported = 'true';
+
     Reviews.updateOne({id: reviewId}, {reported}, (err, results) => {
       if (err) {
         res.status(404).send('Could not report review');

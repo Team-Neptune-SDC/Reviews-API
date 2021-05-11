@@ -6,7 +6,7 @@ mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: true
+  useFindAndModify: false
 });
 
 const Characteristic = mongoose.model('Characteristic', schemas.characteristicsSchema, 'characteristics_aggregated');

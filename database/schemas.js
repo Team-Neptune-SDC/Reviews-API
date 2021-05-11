@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const reviewPhotosSchema = {
   "id": Number,
@@ -6,19 +7,21 @@ const reviewPhotosSchema = {
   "url": String
 };
 
+let date = moment().format('YYYY-MM-DD');
+
 const reviewSchema = {
   "id": Number,
   "product_id": Number,
   "rating": Number,
-  "date": {type: Date, default: Date.now},
+  "date": {type: String, default: date},
   "summary": String,
   "body": String,
-  "recommend": Boolean,
-  "reported": Boolean,
+  "recommend": String,
+  "reported": String,
   "reviewer_name": String,
   "reviewer_email": String,
   "response": String,
-  "helpfulness": String,
+  "helpfulness": Number,
   "photos": [reviewPhotosSchema]
 };
 
