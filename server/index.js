@@ -101,7 +101,6 @@ app.post('/reviews', (req, res) => {
       if (err) {
         res.status(404).send('Could not post to Reviews');
       }
-      console.log(results)
       res.status(201).send(results);
     })
   })
