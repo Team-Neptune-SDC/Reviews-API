@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const schemas = require('./schemas');
-const mongoUri = 'mongodb://localhost/sdc_reviews';
+const mongoUri = 'mongodb://3.23.104.110/sdc_reviews';
 
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
