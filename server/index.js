@@ -19,7 +19,7 @@ app.get('/reviews', (req, res) => {
       res.sendStatus(404);
     }
     res.status(200).send(results);
-  }).exec();
+  }).limit(100).exec();
 });
 
 app.get('/reviews/meta', (req, res) => {
