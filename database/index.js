@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const schemas = require('./schemas');
-const mongoUri = 'mongodb://3.23.104.110/sdc_reviews';
+require('dotenv').config();
+const mongoUri = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PW}@${process.env.MONGO_IP}/sdc_reviews`;
 
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
