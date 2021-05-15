@@ -168,7 +168,7 @@ app.put('/reviews/:review_id/helpful', (req, res) => {
 app.put('/reviews/:review_id/report', (req, res) => {
   let reviewId = req.params.review_id;
 
-  Reviews.findOneAndUpdate({id: reviewId}, {'reported': "true"}, (err, result) => {
+  Reviews.findOneAndUpdate({id: reviewId}, {'reported': 1}, (err, result) => {
     if (err) {
       res.status(404).send('Could not report review');
     }
