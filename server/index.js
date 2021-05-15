@@ -53,6 +53,10 @@ app.get('/reviews/meta', (req, res) => {
       for (let j = 0; j < results[i].characteristic_review_data.length; j++) {
         values.push(results[i].characteristic_review_data[j].value);
       }
+      if (values.length === 0) {
+        res.sendStatus(404);
+        return;
+      }
       let avgValue = values.reduce((a, b) => a + b) / values.length;
       obj.characteristics[results[i].name] = {
         id: results[i].id,
