@@ -18,6 +18,7 @@ app.get('/reviews', (req, res) => {
     if (err) {
       res.sendStatus(404);
     }
+    console.log(`GET /reviews?${product_id}`);
     res.status(200).send(results);
   }).limit(100).exec();
 });
@@ -70,6 +71,7 @@ app.get('/reviews/meta', (req, res) => {
         obj.ratings[results[i].rating]++;
       }
 
+      console.log(`GET /reviews/meta?${product_id}`);
       res.status(200).send(obj);
     }).exec();
   }).exec();
@@ -101,6 +103,7 @@ app.post('/reviews', (req, res) => {
       if (err) {
         res.status(404).send('Could not post to Reviews');
       }
+      console.log(`POST /reviews`);
       res.status(201).send(results);
     })
   })
@@ -146,6 +149,7 @@ app.put('/reviews/:review_id/helpful', (req, res) => {
     if (err) {
       res.status(404).send('Could not mark review as helpful');
     }
+    console.log(`PUT /reviews/${reviewId}/helpful`);
     res.status(200).send(result);
   })
 
@@ -172,6 +176,7 @@ app.put('/reviews/:review_id/report', (req, res) => {
     if (err) {
       res.status(404).send('Could not report review');
     }
+    console.log(`PUT /reviews/${reviewId}/report`);
     res.status(200).send(result);
   })
 
