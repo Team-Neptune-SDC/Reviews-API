@@ -142,11 +142,11 @@ app.post('/reviews', (req, res) => {
 app.put('/reviews/:review_id/helpful', (req, res) => {
   let reviewId = req.params.review_id;
 
-  Reviews.findOneAndUpdate({id: reviewId}, {$inc: {'helpfulness': 1}}, (err, results) => {
+  Reviews.findOneAndUpdate({id: reviewId}, {$inc: {'helpfulness': 1}}, (err, result) => {
     if (err) {
       res.status(404).send('Could not mark review as helpful');
     }
-    res.status(200).send(results);
+    res.status(200).send(result);
   })
 
   // Reviews.find({id: reviewId}, (err, result) => {
@@ -172,7 +172,7 @@ app.put('/reviews/:review_id/report', (req, res) => {
     if (err) {
       res.status(404).send('Could not report review');
     }
-    res.status(200).send(results);
+    res.status(200).send(result);
   })
 
   // Reviews.find({id: reviewId}, (err, result) => {
