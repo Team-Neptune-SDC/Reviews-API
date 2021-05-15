@@ -142,40 +142,53 @@ app.post('/reviews', (req, res) => {
 app.put('/reviews/:review_id/helpful', (req, res) => {
   let reviewId = req.params.review_id;
 
-  Reviews.find({id: reviewId}, (err, result) => {
+  Reviews.findOneAndUpdate({id: reviewId}, {$inc: {'helpfulness': 1}}, (err, results) => {
     if (err) {
-      res.status(404).send('Could not find review to update helpfulness');
+      res.status(404).send('Could not mark review as helpful');
     }
-    let helpfulness = parseInt(result[0].helpfulness);
-    helpfulness++;
-
-    Reviews.updateOne({id: reviewId}, {helpfulness}, (err, results) => {
-      if (err) {
-        console.log('bye')
-        res.status(404).send('Could not mark review as helpful');
-      }
-      res.status(200).send(results);
-    })
+    res.status(200).send(results);
   })
+
+  // Reviews.find({id: reviewId}, (err, result) => {
+  //   if (err) {
+  //     res.status(404).send('Could not find review to update helpfulness');
+  //   }
+  //   let helpfulness = parseInt(result[0].helpfulness);
+  //   helpfulness++;
+
+  //   Reviews.updateOne({id: reviewId}, {helpfulness}, (err, results) => {
+  //     if (err) {
+  //       res.status(404).send('Could not mark review as helpful');
+  //     }
+  //     res.status(200).send(results);
+  //   })
+  // })
 });
 
 app.put('/reviews/:review_id/report', (req, res) => {
   let reviewId = req.params.review_id;
 
-  Reviews.find({id: reviewId}, (err, result) => {
+  Reviews.findOneAndUpdate({id: reviewId}, {'reported': "true"}, (err, result) => {
     if (err) {
-      res.status(404).send('Could not find review to report');
+      res.status(404).send('Could not report review');
     }
-
-    let reported = 1;
-
-    Reviews.updateOne({id: reviewId}, {reported}, (err, results) => {
-      if (err) {
-        res.status(404).send('Could not report review');
-      }
-      res.status(200).send(results);
-    })
+    res.status(200).send(results);
   })
+
+  // Reviews.find({id: reviewId}, (err, result) => {
+  //   if (err) {
+  //     res.status(404).send('Could not find review to report');
+  //   }
+
+  //   let reported = 1;
+
+  //   Reviews.updateOne({id: reviewId}, {reported}, (err, results) => {
+  //     if (err) {
+  //       res.status(404).send('Could not report review');
+  //     }
+  //     res.status(200).send(results);
+  //   })
+  // })
 });
 
 app.listen(PORT, () => {
